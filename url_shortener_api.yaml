@@ -1,0 +1,103 @@
+openapi: "3.0.0"
+info:
+  description: "URL Shortener API"
+  version: "1.0.0"
+  title: "Swagger URL Shortener"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "admin@urlshortener.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+tags:
+- name: "shortener"
+  externalDocs:
+    description: "Find out more"
+    url: "http://urlshortener.com/doc"
+paths:
+  /:
+    post:
+      tags:
+      - "shortener"
+      summary: "Create new short link and add it to the store"
+      description: "Creates new short link and returns it"
+      operationId: "createShortLink"
+      requestBody:
+        description: ""
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/LongLinkRequest"
+      responses:
+        "201":
+          description: "successful created"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ShortLinkResponse"
+        "default":
+          description: "Some error"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+          
+  /{shortLink}:
+    get:
+      tags:
+      - "shortener"
+      summary: "Get long link by short link"
+      description: "Returns long link"
+      operationId: "getLongLink"
+      parameters:
+      - name: "shortLink"
+        in: "path"
+        description: "Short link"
+        required: true
+        schema:
+          $ref: "#/components/schemas/Link"
+      responses:
+        "200":
+          description: "successful operation"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/LongLinkResponse"
+        "default":
+          description: "Some error"
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ErrorMessage"
+  
+components:
+  schemas:
+    Link:
+      type: "string"
+    LongLinkResponse:
+      type: "object"
+      properties:
+        shortLink:
+          $ref: "#/components/schemas/Link"
+    LongLinkRequest:
+      type: "object"
+      properties:
+        shortLink:
+          $ref: "#/components/schemas/Link"
+    ShortLinkResponse:
+      type: "object"
+      properties:
+        shortLink:
+          $ref: "#/components/schemas/Link"
+    ErrorMessage:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+        error:
+          type: "string"
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
